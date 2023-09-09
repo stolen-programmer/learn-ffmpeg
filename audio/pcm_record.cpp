@@ -3,24 +3,12 @@
 //
 
 #include <cassert>
+#include <common.h>
 #include <iostream>
+
 extern "C" {
 #include <libavdevice/avdevice.h>
 }
-
-#define check_ret(ret)                                                          \
-    if (ret != 0) {                                                             \
-        av_strerror(ret, errbuf, sizeof(errbuf) - 1);                           \
-        printf("at %s(%s:%d)\t%s\n", __FUNCTION__, __FILE__, __LINE__, errbuf); \
-        return ret;                                                             \
-    }
-
-#define check_label(ret, lab)                                                   \
-    if (ret != 0) {                                                             \
-        av_strerror(ret, errbuf, sizeof(errbuf) - 1);                           \
-        printf("at %s(%s:%d)\t%s\n", __FUNCTION__, __FILE__, __LINE__, errbuf); \
-        goto lab;                                                               \
-    }
 
 int main(int argc, const char *argv[]) {
     av_log_set_level(AV_LOG_TRACE);
@@ -48,12 +36,25 @@ int main(int argc, const char *argv[]) {
     // 缓冲区大小 毫秒单位  44100(采样率)*16(采样大小)*2(通道) = 1411200 bits / 8 = 176400 bytes
     // 176400 / 2(1000ms / 500ms) = 88200 bytes
     av_dict_set(&options, "audio_buffer_size", "500", 0);
+    // 测试不可用选项
+    av_dict_set(&options, "test", "test", 0);
+    av_dict_set(&options, "test", "test", 0);
 
     // open_device 打开设备
     AVFormatContext *inputFormatContext = nullptr;
     auto ret =
             avformat_open_input(&inputFormatContext, "audio=耳机 (Q10 Hands-Free AG Audio)", inputFormat, &options);
     check_ret(ret);
+
+    // 有不可用选项
+    if (options != nullptr) {
+        AVDictionaryEntry *entry = nullptr;
+        while (entry = av_dict_get(options, "", entry, AV_DICT_IGNORE_SUFFIX)) {
+            av_log(nullptr, AV_LOG_DEBUG, "不可用 %s: %s\n", entry->key, entry->value);
+        }
+
+        av_dict_free(&options);
+    }
 
     auto fp = fopen("./test.pcm", "wb");
 
