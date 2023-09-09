@@ -9,6 +9,8 @@ endif ()
 
 #find_package(FFMPEG REQUIRED)
 
+include_directories(${CMAKE_SOURCE_DIR})
+
 add_library(ffmpeg INTERFACE)
 
 target_include_directories(ffmpeg INTERFACE ${CMAKE_SOURCE_DIR}/third-party/ffmpeg/include)
@@ -16,11 +18,5 @@ target_include_directories(ffmpeg INTERFACE ${CMAKE_SOURCE_DIR}/third-party/ffmp
 target_link_directories(ffmpeg INTERFACE ${CMAKE_SOURCE_DIR}/third-party/ffmpeg/lib)
 
 target_link_libraries(ffmpeg INTERFACE avcodec avdevice avformat avutil swresample swscale)
-
-#target_link_libraries(record PRIVATE ffmpeg)
-
-#target_link_libraries(resample_audio PRIVATE ffmpeg)
-
-#target_link_libraries(mux PRIVATE ffmpeg)
 
 add_subdirectory(audio)
