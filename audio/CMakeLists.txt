@@ -7,6 +7,7 @@ add_executable(pcm_record pcm_record.cpp)
 add_executable(resample_pcm resample_pcm.cpp)
 add_executable(audio_fifo audio_fifo.cpp)
 add_executable(encode_aac encode_aac.cpp)
+add_executable(audio_fmt_convert audio_fmt_convert.cpp)
 
 target_link_libraries(pcm_record PRIVATE ffmpeg)
 target_link_libraries(resample_pcm PRIVATE ffmpeg)
