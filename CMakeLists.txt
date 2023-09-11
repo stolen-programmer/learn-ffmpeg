@@ -13,9 +13,9 @@ include_directories(${CMAKE_SOURCE_DIR})
 
 add_library(ffmpeg INTERFACE)
 
-target_include_directories(ffmpeg INTERFACE ${CMAKE_SOURCE_DIR}/third-party/ffmpeg/include)
+target_include_directories(ffmpeg INTERFACE ${CMAKE_SOURCE_DIR}/third-party/include)
 
-target_link_directories(ffmpeg INTERFACE ${CMAKE_SOURCE_DIR}/third-party/ffmpeg/lib)
+target_link_directories(ffmpeg INTERFACE ${CMAKE_SOURCE_DIR}/third-party/lib)
 
 target_link_libraries(ffmpeg INTERFACE avcodec avdevice avformat avutil swresample swscale)
 
